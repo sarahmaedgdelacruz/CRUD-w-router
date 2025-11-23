@@ -21,10 +21,7 @@ function Homepage() {
     e.preventDefault();
 
     // validate without using trim: stop if any field is exactly empty string
-    if (!title || !date || !details) {
-      alert("Fill all fields");
-      return;
-    }
+    if (!title || !date || !details) return alert("Fill all fields");
 
     if (editingIndex !== null) {
       // update existing
@@ -46,14 +43,32 @@ function Homepage() {
     setTitle("");
     setDate("");
     setDetails("");
+
+    const startEdit = (index) => {
+  const t = tasks[index];
+  setTitle(t.title);
+  setDate(t.date);
+  setDetails(t.details);
+  setEditingIndex(index);
+};
+
+const cancelEdit = () => {
+  setTitle("");
+  setDate("");
+  setDetails("");
+  setEditingIndex(null);
+};
+
+const deleteTask = (index) => {
+  const next = tasks.filter((_, i) => i !== index);
+  save(next);
+};
+
   };
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col items-center py-12">
       <h1 className="text-center font-bold mb-4">Task Manager</h1>
-      <form
-        onSubmit={addTask}
-        className="bg-white p-6 rounded shadow w-full max-w-md"
-      >
+      <form onSubmit={addTask} className="bg-white p-6 rounded shadow w-full max-w-md">
         <input
           type="text"
           placeholder="Task Title"
@@ -77,10 +92,7 @@ function Homepage() {
         />
 
         <div className="flex gap-2">
-          <button
-            className="flex-1 bg-yellow-500 text-white py-2 rounded"
-            type="submit"
-          >
+          <button className="flex-1 bg-yellow-500 text-white py-2 rounded" type="submit">
             {editingIndex !== null ? "Update Task" : "Add Task"}
           </button>
 
@@ -95,43 +107,6 @@ function Homepage() {
           )}
         </div>
       </form>
-
-      <div className="w-[450px] mt-6 px-4">
-        <h2 className="font-semibold mb-3">Saved Tasks</h2>
-        {tasks.length === 0 ? (
-          <p className="text-sm text-gray-600">No tasks added yet.</p>
-        ) : (
-          tasks.map((t, i) => (
-            <div
-              key={i}
-              className="bg-white border rounded p-4 mb-3 flex justify-between items-start"
-            >
-              <div>
-                <div className="font-semibold">{t.title}</div>
-                <div className="text-sm text-gray-600">
-                  Due: {t.date || "—"}
-                </div>
-                <div className="text-sm mt-2">{t.details}</div>
-              </div>
-
-              <div className="flex flex-col items-end gap-2">
-                <button
-                  onClick={() => startEdit(i)}
-                  className="text-blue-600 text-sm"
-                >
-                  Edit
-                </button>
-                <button
-                  onClick={() => deleteTask(i)}
-                  className="text-red-600 text-sm"
-                >
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))
-        )}
-      </div>
     </div>
   );
 }

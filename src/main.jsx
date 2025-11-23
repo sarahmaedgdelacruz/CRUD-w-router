@@ -1,6 +1,6 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router";
+import App from "./App.jsx";
 import Homepage from "./pages/Homepage.jsx";
 import Tasklists from "./pages/Tasklists.jsx";
 import Taskdetails from "./pages/Taskdetails.jsx";
@@ -8,16 +8,11 @@ import Taskdetails from "./pages/Taskdetails.jsx";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Homepage />,
-  },
-  {
-    path: "/",
-    element: <Tasklists />,
+    element: <App />,
     children: [
-      {
-        path: "id",
-        element: <Taskdetails />,
-      },
+      { path: "/", element: <Homepage /> },            
+      { path: "/all-task", element: <Tasklists /> },     
+      { path: "/all-task/:id", element: <Taskdetails /> } 
     ],
   },
 ]);
